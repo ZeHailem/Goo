@@ -1,4 +1,4 @@
-name: CI Pipeline
+name: Super-Linter
 
 on:
   push:
@@ -7,23 +7,14 @@ on:
     branches: [ main ]
 
 jobs:
-  build:
+  lint:
     runs-on: ubuntu-latest
-
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    - name: Set up .NET
-      uses: actions/setup-dotnet@v5
-      with:
-        dotnet-version: '8.0.x'
-
-    - name: Restore dependencies
-      run: dotnet restore
-
-    - name: Build the project
-      run: dotnet build --no-restore
-
-    - name: Run tests
-      run: dotnet test --no-build --verbosity normal
+      - name: Run Super-Linter
+        uses: super-linter/super-linter@v5
+        env:
+          DEFAULT_BRANCH: main
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
